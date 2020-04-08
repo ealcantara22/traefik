@@ -1,0 +1,46 @@
+
+################################################################
+# Entrypoints configuration
+################################################################
+  
+[entryPoints]
+  [entryPoints.http]
+    address = ":80"
+
+  [entryPoints.https]
+    address = ":443"
+
+################################################################
+# Providers and TLS configuration
+################################################################
+
+[providers.docker]
+  endpoint = "unix:///var/run/docker.sock"
+  exposedByDefault = false
+
+[tls.stores]
+  [tls.stores.default]
+    [tls.stores.default.defaultCertificate]
+      certFile = "/etc/traefik/ssl/cert.crt"
+      keyFile  = "/etc/traefik/ssl/cert.key"
+
+################################################################
+# Traefik and Access logs  configuration
+################################################################
+
+[traefikLog]
+  filePath = "/var/log/traefik/traefik.log"
+  format   = "json"
+
+[accessLog]
+  filePath = "/var/log/traefik/access.log"
+  format = "json"
+
+################################################################
+# API and dashboard configuration
+################################################################
+
+[api]
+  insecure = true
+  dashboard = true
+  debug = true
