@@ -1,12 +1,28 @@
 version: '3.3'
 
+networks: 
+  default:
+    external: 
+      name: ${DOCKER_NETWORK}
+
 services:
   traefik:
     restart: always
     container_name: traefik
     image: traefik:v2.2
-    network_mode: host
+    ports:
+      - 80:80
+      - 443:443
+    env_file: .env
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=${DOCKER_NETWORK}
+      - traefik.http.routers.dashboard.entrypoints=http
+      - traefik.http.routers.dashboard.rule=Host(`${TRAEFIK_DASHBOARD_HOST}`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`))
+      - traefik.http.routers.dashboard.service=api@internal
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./etc:/etc/traefik/
+      - ./traefik.toml:/etc/traefik/traefik.toml:ro
+      - ./dynamic:/etc/traefik/dynamic:ro
+      - ./certs:/etc/certs:ro
       - ./logs:/var/log/traefik

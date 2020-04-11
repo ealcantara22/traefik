@@ -1,0 +1,14 @@
+
+# Default certificate.
+[tls.stores]
+  [tls.stores.default]
+    [tls.stores.default.defaultCertificate]
+      certFile = "/etc/certs/cert.crt"
+      keyFile = "/etc/certs/cert.key"
+
+# Domain matching specific configuration. You can add as many as you want.
+[[tls.certificates]]
+  certFile = "/etc/certs/my-domain.crt"
+  keyFile = "/etc/certs/my-domain.key"
+  stores = ["default"]
+  
